@@ -1,0 +1,22 @@
+{
+  "name": "minidev",
+  "version": "1.0.0",
+  "description": "mini editor de codigo",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mryanalmeida/Minidev.git"
+  },
+  "author": "Marcos Almeida",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mryanalmeida/Minidev/issues"
+  },
+  "homepage": "https://github.com/mryanalmeida/Minidev#readme",
+  "devDependencies": {
+    "electron": "^33.0.1"
+  }
+}
