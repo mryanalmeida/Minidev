@@ -1,50 +1,71 @@
-console.log("Processo Principal")
+console.log("Processo principal")
 
-const { shell } = require('electron')
-//Importação de pacotes (Bibliotecas)
-//NativeTheme (Forçar um tema no sistema operacioanal)
-//Menu (Criar um menu personalizado)
-//shell(acessar links externos)
-const { app, BrowserWindow, nativeTheme, Menu } = require('electron/main')
+// importação de pacotes (bibliotecas)
+// nativeTheme (forçar um tema no sistema operacional)
+// Menu (criar um menu personalizado)
+// shell (acessar links externos)
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require('electron/main')
 const path = require('node:path')
 
-//Janela Principal
-let win //Importante! Neste projeto o escopo da variavel win deve ser global
+// janela principal
+let win //Importante! Neste projeto o escopo da variável win deve ser global
 function createWindow() {
-    nativeTheme.themeSource = 'dark' //Mudar a cor do Tema (claro, escuro ou Padrão do sistema)
+    nativeTheme.themeSource = 'dark' //janela sempre escura
     win = new BrowserWindow({
-        width: 1010, //largura em px.
-        height: 720, //altura em px.
+        width: 1010, //largura em px
+        height: 720, //altura em px
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
     })
-    //Menu Personalizado
+
+    // Menu personalizado
     Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
     win.loadFile('./src/views/index.html')
 }
 
-
-//Janela sobre
+// Janela sobre
 function aboutWindow() {
     nativeTheme.themeSource = 'dark'
-    const about = new BrowserWindow({
-        width: 360,
-        height: 220,
-        autoHideMenuBar: true, //esonder o menu
-        resizable: false,
-        minimizable: false,
-        //titleBarStyle: 'hidden' //para totem de auto atendimento
-    })
+    // a linha abaixo obtem a janela principal
+    const main = BrowserWindow.getFocusedWindow()
+    let about
+    // validar a janela pai
+    if (main) {
+        about = new BrowserWindow({
+            width: 320,
+            height: 160,
+            autoHideMenuBar: true, //esconder o menu
+            resizable: false, // impedir redimensionamento
+            minimizable: false, // impedir minimizar a janela
+            //titleBarStyle: 'hidden' //esconder a barra de estilo(ex: totem de auto atendimento)
+            parent: main, //estabelecer uma hierarquia de janelas
+            modal: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+        })
+    }
+
     about.loadFile('./src/views/sobre.html')
+
+    // fechar a janela quando receber mensagem do processo de renderização.
+    ipcMain.on('close-about', () => {
+        console.log("Recebi a mensagem close-about")
+        // validar se a janela foi destruída
+        if (about && !about.isDestroyed()) {
+            about.close()
+        }
+    })
+
 }
 
-//Execução assincrona do aplicativo electron
+// execução assíncrona do aplicativo electron
 app.whenReady().then(() => {
     createWindow()
 
-    //Comportamento do Mac ao fechar uma janela 
+    // comportamento do MAC ao fechar uma janela
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow()
@@ -52,14 +73,14 @@ app.whenReady().then(() => {
     })
 })
 
-//encerrar a aplicação quando a janela for feichada (Windows e Linux)
+// encerrar a aplicação quando a janela for fechada (Windows e Linux)
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
-//Template do menu
+// template do menu
 const template = [
     {
         label: 'Arquivo',
@@ -68,7 +89,6 @@ const template = [
                 label: 'Novo',
                 accelerator: 'CmdOrCtrl+N'
             },
-
             {
                 label: 'Abrir',
                 accelerator: 'CmdOrCtrl+O'
@@ -81,7 +101,6 @@ const template = [
                 label: 'Salvar Como',
                 accelerator: 'CmdOrCtrl+Shift+S'
             },
-
             {
                 type: 'separator'
             },
@@ -90,7 +109,6 @@ const template = [
                 accelerator: 'Alt+F4',
                 click: () => app.quit()
             }
-
         ]
     },
     {
@@ -105,7 +123,7 @@ const template = [
                 role: 'redo'
             },
             {
-                type: 'separator',
+                type: 'separator'
             },
             {
                 label: 'Recortar',
@@ -116,16 +134,16 @@ const template = [
                 role: 'copy'
             },
             {
-                label: 'colar',
+                label: 'Colar',
                 role: 'paste'
-            }
+            },
         ]
     },
     {
         label: 'Zoom',
         submenu: [
             {
-                label: 'Aplicar Zoom',
+                label: 'Aplicar zoom',
                 role: 'zoomIn'
             },
             {
@@ -133,7 +151,7 @@ const template = [
                 role: 'zoomOut'
             },
             {
-                label: 'Restaurar o zoom padrao',
+                label: 'Restaurar o zoom padrão',
                 role: 'resetZoom'
             }
         ]
@@ -163,7 +181,7 @@ const template = [
                 type: 'separator'
             },
             {
-                label: 'Restaurar a cor Padrão'
+                label: 'Restaurar a cor padrão'
             }
         ]
     },
@@ -172,7 +190,7 @@ const template = [
         submenu: [
             {
                 label: 'Repositório',
-                click: () => shell.openExternal('https://github.com/mryanalmeida/Minidev')
+                click: () => shell.openExternal('https://github.com/professorjosedeassis/minidev')
             },
             {
                 label: 'Sobre',
