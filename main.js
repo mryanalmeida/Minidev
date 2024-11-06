@@ -4,8 +4,9 @@ console.log("Processo principal")
 // nativeTheme (forçar um tema no sistema operacional)
 // Menu (criar um menu personalizado)
 // Shell (acessar links externos)
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require('electron/main')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron/main')
 const path = require('node:path')
+const { fileURLToPath } = require('node:url')
 
 // Janela principal
 let win // Importante! Neste projeto o escopo da variavél win deve ser global
@@ -89,7 +90,8 @@ const template = [
             },
             {
                 label: 'Abrir',
-                accelerator: 'CmdOrCtrl+O'
+                accelerator: 'CmdOrCtrl+O',
+                click: () => abrirArquivo()
             },
             {
                 label: 'Salvar',
@@ -220,3 +222,38 @@ function novoArquivo() {
     win.webContents.send('set-file', file)
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+//Abrir arquivo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//2 funções abrir arquivo(caminho)
+async function abrirArquivo() {
+    //usar o recurso do electron para abrir o explorador de arquivos
+    let dialogFile = await dialog.showOpenDialog({
+        defaultPath: file.path
+    })
+
+    //console.log(dialogFile)
+    if (dialogFile.canceled === true) {
+        return false
+    } else {
+        //abrir o arquivo
+        file = {
+            nome: path.basename(dialogFile.filePaths[0]),
+            content: lerArquivo(dialogFile.filePaths[0]),
+            saved: true,
+            path: dialogFile.filePaths[0]
+        }
+    }
+    console.log(file)
+
+}
+
+function lerArquivo(filePath) {
+    //Usar p trycatch sempre que trabalhar com arquivos
+    try {
+        return fstat.readFileSync(filePath, 'utf-8')
+    } catch (erro) {
+        console.log(erro)
+        return ''
+    }
+}
