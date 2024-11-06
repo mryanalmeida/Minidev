@@ -3,14 +3,14 @@
 /* importação de font (off-line) */
 @font-face {
     font-family: 'Source Code Pro';
-    src: url('../Source_Code_Pro/SourceCodePro-Italic-VariableFont_wght.ttf');
-    src: url('../Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf');
+    src: url(../Source_Code_Pro/SourceCodePro-Italic-VariableFont_wght.ttf);
+    src: url(../Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf);
 }
 
 /* Cores paleta monokai */
 :root {
     --fundo: #1f1f1f;
-    --branco: #fff;
+    --branco: #ffffff;
     --amarelo: #e5b567;
     --azul: #9cdcfe;
     --cinzaClaro: #d6d6d6;
@@ -52,25 +52,27 @@ body {
 
 #linhas {
     width: 8%;
-    /* background-color: var(--amarelo);*/
+    /* background-color: var(--amarelo); */
     float: left;
     overflow-y: auto;
+    /* Ativar o scroll na vertical */
     overflow: hidden;
     text-align: right;
-    padding-right: calc(1% 7px);
+    padding-right: calc(1% + 7px);
+    color: var(--cinza);
 }
 
 #txtArea {
     width: 92%;
     /* background-color: var(--cinzaClaro); */
     color: var(--cinzaClaro);
-    /* impedir o redimensionamento do campo d etexto txtArea */
-    resize: none;
 }
 
 #txtArea:focus {
-    /* remover o foco da área de texto */
+    /* Remover o foco da área de texto */
     outline: none;
+    /* Impedir o redimensionamento do campo de texto txtArea */
+    resize: none;
 }
 
 /* Sobre */
@@ -91,15 +93,15 @@ p {
 
 #sobre p {
     border-right: 2px solid;
-    width: 29ch;
-    /* efeito de animação */
+    width: 24ch;
+    /* Efeito de animação */
     white-space: nowrap;
     overflow: hidden;
-    /* executar as funções de animação abaixo */
-    animation: typing 2s steps(29), blink-cursor 0.5s step-end infinite;
+    /* Executar as funções de animação abaixo */
+    animation: typing 2s steps(24), blink-cursor 0.5s step-end infinite;
 }
 
-/* funções CSS para animação */
+/* Funções CSS para animação */
 @keyframes blink-cursor {
     50% {
         border-color: transparent;
