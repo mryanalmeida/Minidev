@@ -238,7 +238,7 @@ async function abrirArquivo() {
     } else {
         //abrir o arquivo
         file = {
-            nome: path.basename(dialogFile.filePaths[0]),
+            name: path.basename(dialogFile.filePaths[0]),
             content: lerArquivo(dialogFile.filePaths[0]),
             saved: true,
             path: dialogFile.filePaths[0]
