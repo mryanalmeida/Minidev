@@ -244,8 +244,9 @@ async function abrirArquivo() {
             path: dialogFile.filePaths[0]
         }
     }
-    console.log(file)
-
+    //console.log(file)
+    //enviar o arquivo para o renderizador
+    win.webContents.send('set-file,', file)
 }
 
 function lerArquivo(filePath) {
