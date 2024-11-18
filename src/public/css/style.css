@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/* importação de font (off-line) */
+/* Importação de fonte (off-line) */
 @font-face {
     font-family: 'Source Code Pro';
     src: url('../Source_Code_Pro/SourceCodePro-Italic-VariableFont_wght.ttf');
@@ -9,16 +9,16 @@
 
 /* Cores paleta monokai */
 :root {
-    --fundo: #1f1f1f;
-    --branco: #fff;
-    --amarelo: #e5b567;
-    --azul: #9cdcfe;
-    --cinzaClaro: #d6d6d6;
+    --fundo: #1F1F1F;
+    --branco: #FFFFFF;
+    --amarelo: #E5B567;
+    --azul: #9CDCFE;
+    --cinzaClaro: #D6D6D6;
     --cinza: #858585;
-    --laranja: #e87d3e;
-    --pink: #b05279;
-    --roxo: #9e86c8;
-    --verde: #b4d273;
+    --laranja: #E87D3E;
+    --pink: #B05279;
+    --roxo: #9E86C1;
+    --verde: #B4D273;
 }
 
 /* CSS Reset */
@@ -29,7 +29,7 @@
     box-sizing: border-box;
 }
 
-/* Janela principal */
+/* Janela Principal */
 html,
 body {
     width: 100%;
@@ -39,7 +39,7 @@ body {
 }
 
 body {
-    padding-top: 10px;
+    padding-top: 15px;
 }
 
 #linhas,
@@ -52,9 +52,10 @@ body {
 
 #linhas {
     width: 8%;
-   /* background-color: var(--amarelo); */
+    /* background-color: var(--amarelo); */
     float: left;
-    overflow-y: auto; /* ativar o scroll na vertical */
+    overflow-y: auto;
+    /* ativar o scrol na vertical */
     overflow: hidden;
     text-align: right;
     padding-right: calc(1% + 7px);
@@ -65,13 +66,13 @@ body {
     width: 92%;
     /* background-color: var(--cinzaClaro); */
     color: var(--cinzaClaro);
-    /* impedir o redimensionamento do campo d etexto txtArea */
-    resize: none;   
+    /* impedir o redimensionamento do campo de texto txtArea */
+    resize: none;
 }
 
 #txtArea:focus {
     /* remover o foco da área de texto */
-    outline: none; 
+    outline: none;
 }
 
 /* Sobre */
@@ -92,15 +93,15 @@ p {
 
 #sobre p {
     border-right: 2px solid;
-    width: 29ch;
-    /* efeito de animação */
+    width: 17ch;
+    /* Efeito de animação */
     white-space: nowrap;
     overflow: hidden;
-    /* executar as funções de animação abaixo */
-    animation: typing 2s steps(29), blink-cursor 0.5s step-end infinite;
+    /* Executar as funções de animações abaixo*/
+    animation: typing 2s steps(17), blink-cursor 0.5s step-end infinite;
 }
 
-/* funções CSS para animação */
+/* Funções CSS para animação */
 @keyframes blink-cursor {
     50% {
         border-color: transparent;
@@ -119,6 +120,7 @@ p {
     position: fixed;
     bottom: 20px;
     right: 20px;
+
 }
 
 #sobre button:hover {

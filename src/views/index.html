@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -13,10 +13,11 @@
 <body>
     <!-- Numeração de linhas -->
     <div id="linhas"></div>
-    <!-- Editor de código -->
-    <!-- spellcheck="false" desativa a verificação ortográfica -->
-    <textarea id="txtArea" spellcheck="false"></textarea>
-    <!-- Processo de renderização -->
+    <!-- Editor de Código -->
+    <!-- spellcheck="false" desativa a verficação ortográfia -->
+    <!-- onkeyup="update" "soltar uma tecla" que será usado  para atualizar o conteúdo do objeto file (main.js) -->
+    <textarea id="txtArea" spellcheck="false" onkeyup="update()"></textarea>
+    <!-- Processo de Renderização -->
     <script src="renderer.js"></script>
 </body>
 

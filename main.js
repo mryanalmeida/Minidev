@@ -1,25 +1,26 @@
-console.log("Processo principal")
+console.log("Processo Principal")
 
-// importação de pacotes (bibliotecas)
+// Importação de pacotes (bibliotecas)
 // nativeTheme (forçar um tema no sistema operacional)
 // Menu (criar um menu personalizado)
 // shell (acessar links externos)
 const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron/main')
 const path = require('node:path')
 
-//importação da biblioteca file system (nativa do java script) para manipular arquivos
+// Importação da biblioteca file system (nativa do Java Script) para manipular arquivos
 const fs = require('fs')
+const { readFileSync } = require('node:fs')
 
-// criação de um objeto com a estrutura básica de um arquivo
+// Criação de um objeto com a característica básica de um arquivo
 let file = {}
 
-// janela principal
-let win //Importante! Neste projeto o escopo da variável win deve ser global
+// Janela Principal
+let win // Importante! Neste projeto o escopo da varíavel win deve ser global
 function createWindow() {
-    nativeTheme.themeSource = 'dark' //janela sempre escura
+    nativeTheme.themeSource = 'dark' // Janela sempre escura
     win = new BrowserWindow({
-        width: 1010, //largura em px
-        height: 720, //altura em px
+        width: 1010, // Largura em px
+        height: 720, // Altura em px
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -31,22 +32,22 @@ function createWindow() {
     win.loadFile('./src/views/index.html')
 }
 
-// Janela sobre
+// Janela Sobre
 function aboutWindow() {
-    nativeTheme.themeSource = 'dark'
-    // a linha abaixo obtem a janela principal
+    nativeTheme.themeSource = "dark"
+    // A linha abaixo obtem a janela principal
     const main = BrowserWindow.getFocusedWindow()
     let about
-    // validar a janela pai
+    // Validar a janela pai
     if (main) {
         about = new BrowserWindow({
             width: 320,
             height: 160,
-            autoHideMenuBar: true, //esconder o menu
-            resizable: false, // impedir redimensionamento
-            minimizable: false, // impedir minimizar a janela
-            //titleBarStyle: 'hidden' //esconder a barra de estilo(ex: totem de auto atendimento)
-            parent: main, //estabelecer uma hierarquia de janelas
+            autoHideMenuBar: true, // Esconder o menu
+            resizable: false, // Impedir redimensionamento
+            minimizable: false, // Impedir minimizar a janela
+            //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
+            parent: main, // Estabelecer uma hierarquia de janelas
             modal: true,
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
@@ -56,10 +57,10 @@ function aboutWindow() {
 
     about.loadFile('./src/views/sobre.html')
 
-    // fechar a janela quando receber mensagem do processo de renderização.
+    // Fechar a janela quando receber mensagem do processo de renderização.
     ipcMain.on('close-about', () => {
-        console.log("Recebi a mensagem close-about")
-        // validar se a janela foi destruída
+        // console.log("recebi a mensagem de fechar")
+        // Validar se a janela foi destruida
         if (about && !about.isDestroyed()) {
             about.close()
         }
@@ -67,11 +68,11 @@ function aboutWindow() {
 
 }
 
-// execução assíncrona do aplicativo electron
+// Execução assíncrona do aplicativo electron
 app.whenReady().then(() => {
     createWindow()
 
-    // comportamento do MAC ao fechar uma janela
+    // Comportamento do MAC ao fechar uma janela
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow()
@@ -79,14 +80,14 @@ app.whenReady().then(() => {
     })
 })
 
-// encerrar a aplicação quando a janela for fechada (Windows e Linux)
+// Encerrar a aplicação quando a janela for fechada (windows e linux)
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
-// template do menu
+// Template do menu
 const template = [
     {
         label: 'Arquivo',
@@ -96,6 +97,7 @@ const template = [
                 accelerator: 'CmdOrCtrl+N',
                 click: () => novoArquivo()
             },
+
             {
                 label: 'Abrir',
                 accelerator: 'CmdOrCtrl+O',
@@ -111,6 +113,7 @@ const template = [
                 accelerator: 'CmdOrCtrl+Shift+S',
                 click: () => salvarComo()
             },
+
             {
                 type: 'separator'
             },
@@ -119,8 +122,10 @@ const template = [
                 accelerator: 'Alt+F4',
                 click: () => app.quit()
             }
+
         ]
     },
+
     {
         label: 'Editar',
         submenu: [
@@ -128,6 +133,7 @@ const template = [
                 label: 'Desfazer',
                 role: 'undo'
             },
+
             {
                 label: 'Refazer',
                 role: 'redo'
@@ -135,20 +141,24 @@ const template = [
             {
                 type: 'separator'
             },
+
             {
                 label: 'Recortar',
                 role: 'cut'
             },
+
             {
                 label: 'Copiar',
                 role: 'copy'
             },
+
             {
                 label: 'Colar',
                 role: 'paste'
             },
         ]
     },
+
     {
         label: 'Zoom',
         submenu: [
@@ -156,16 +166,19 @@ const template = [
                 label: 'Aplicar zoom',
                 role: 'zoomIn'
             },
+
             {
                 label: 'Reduzir',
                 role: 'zoomOut'
             },
+
             {
                 label: 'Restaurar o zoom padrão',
                 role: 'resetZoom'
-            }
+            },
         ]
     },
+
     {
         label: 'Cor',
         submenu: [
@@ -173,42 +186,51 @@ const template = [
                 label: 'Amarelo',
                 click: () => win.webContents.send('set-color', "var(--amarelo)")
             },
+
             {
                 label: 'Azul',
                 click: () => win.webContents.send('set-color', "var(--azul)")
             },
+
             {
                 label: 'Laranja',
                 click: () => win.webContents.send('set-color', "var(--laranja)")
             },
+
             {
                 label: 'Pink',
                 click: () => win.webContents.send('set-color', "var(--pink)")
             },
+
             {
                 label: 'Roxo',
                 click: () => win.webContents.send('set-color', "var(--roxo)")
             },
+
             {
                 label: 'Verde',
                 click: () => win.webContents.send('set-color', "var(--verde)")
             },
+
             {
                 type: 'separator'
             },
+
             {
                 label: 'Restaurar a cor padrão',
                 click: () => win.webContents.send('set-color', "var(--cinzaClaro)")
             }
         ]
     },
+
     {
         label: 'Ajuda',
         submenu: [
             {
                 label: 'Repositório',
-                click: () => shell.openExternal('https://github.com/professorjosedeassis/minidev')
+                click: () => shell.openExternal('https://github.com/Fonseca-J/minidev')
             },
+
             {
                 label: 'Sobre',
                 click: () => aboutWindow()
@@ -217,9 +239,9 @@ const template = [
     }
 ]
 
-// Novo arquivo >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Passo 1: Criar a estrutura de um arquivo e setar o título
-// Um arquivo inicia sem título, sem conteúdo, não está salvo e o local padrão vai ser a pasta documentos
+// Novo arquivo >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Passo 1: Criar a estrtura de um arquivo e setar o título
+// Um arquivo inicia sem título, sem conteúdo, não está salvo e o local padrão vai ser a documentos
 function novoArquivo() {
     file = {
         name: "Sem título",
@@ -227,86 +249,96 @@ function novoArquivo() {
         saved: false,
         path: app.getPath('documents') + 'Sem título'
     }
-    //console.log(file)
-    //enviar ao renderizador a estrutura de um novo arquivo e título
+    // console.log(file)
+    
+    // enviar ao renderizador a estrtura de um novo arquivo e título
     win.webContents.send('set-file', file)
 }
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-// Abrir arquivo >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// 2 funções abrirArquivo() lerArquivo(caminho)
+// Abrir arquivo <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// 2 funções - abrirArquivo() e lerArquivo(caminho)
 async function abrirArquivo() {
-    // Usar um módulo do Electron para abrir o explorador de arquivos
-    let dialogFile = await dialog.showOpenDialog({
-        defaultPath: file.path //selecionar o arquivo no lacal dele
-    })
-    //console.log(dialogFile)
-    //validação do botão [cancelar]
-    if (dialogFile.canceled === true) {
-        return false
-    } else {
-        //abrir o arquivo
-        file = {
-            name: path.basename(dialogFile.filePaths[0]),
-            content: lerArquivo(dialogFile.filePaths[0]),
-            saved: true,
-            path: dialogFile.filePaths[0]
-        }
+// Usar um módulo de Electron para abrir o explorador de arquivos
+let dialogFile = await dialog.showOpenDialog({
+    defaultPath: file.path // selecionar o arquivo no local dele
+})
+//console.log(dialogFile)
+//validação do botão [cancelar]
+if(dialogFile.canceled === true) {
+    return false
+} else {
+    // abrir o arquivo
+    file = {
+        name: path.basename(dialogFile.filePaths[0]),
+        content: lerArquivo(dialogFile.filePaths[0]),
+        saved: true, 
+        path: dialogFile.filePaths[0]
     }
-    //console.log(file)
-    // enviar o arquivo para o renderizador
-    win.webContents.send('set-file', file)
+}
+// console.log(file)
+// enviar o arquivo para o redenrizador
+win.webContents.send('set-file', file)
+
 }
 
-function lerArquivo(filePath) {
-    // usar o trycatch sempre que trabalhar com arquivos
+function lerArquivo(filePath){
+    // Usar o trycath sempre que trabalhar com arquivos
     try {
-        // a linha abaixo usa a biblioteca fs para ler um arquivo, informando o caminho e o encoding do arquivo
+        // a linha abaixo utiliza da biblioteca fs para ler um arquivo, informando o caminho d o ecoding do arquivo. 
         return fs.readFileSync(filePath, 'utf-8')
     } catch (error) {
         console.log(error)
-        return ''
+        return''
     }
 }
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
-// Salvar e salvar como >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// 3 funções 1) Salvar como 2) Salvar 3) Salvar arquivo (fs)
-async function salvarComo() {
+// Salvar e Salvar como... >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 3 funções (1) Salvar como (2) Salvar (3) Salvar Arquivo(fs)
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+async function salvarComo(){
     let dialogFile = await dialog.showSaveDialog({
         defaultPath: file.path
+        
     })
     //console.log(dialogFile)
     if (dialogFile.canceled === true) {
-        return false
+        
     } else {
         salvarArquivo(dialogFile.filePath)
     }
 }
 
 function salvar() {
-    if (file.saved === true) {
-        return salvarArquivo(file.path)
-    } else {
-        return salvarComo()
-    }
+if (file.saved === true) {
+    return salvarArquivo(file.path)
+} else {
+    return salvarComo()
+    
+}
 }
 
 function salvarArquivo(filePath) {
-    console.log(file)
     try {
         // uso da biblioteca fs para gravar um arquivo
-        fs.writeFile(filePath, file.content, (error) => {
+        fs.writeFile(filePath,file.content, (error) => {
             file.path = filePath
             file.saved = true
             file.name = path.basename(filePath)
-        })
+            // aterar o titulo ao salvar o arquivo
+            win.webContents.send('set-file', file)
+
+        })  
+        //console.log(error) 
     } catch (error) {
-        console.log(error)
+        
     }
 }
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// Atualização em tempo real do conteudo do objeto file
+ipcMain.on('update-content', (event, value) => {
+    file.content = value
+})
